@@ -8,43 +8,24 @@ def split_xml_out_file(file_name, line_numbers_of_results):
         # *.xml.out -> *.extension.out
         pattern = re.compile("^(.*)\.xml\.out$")
         base_file_name =  pattern.match(file_name).group(1)
-        density_extension = base_file_name + "-density.out"
-        radioactivity_extension = base_file_name + "-radioactivity.out"
-        absorption_rate_extension = base_file_name + "-absorption.out"
-        fission_extension = base_file_name + "-fission.out"
-        heat_extension = base_file_name + "-heat.out"
-        gamma_extension = base_file_name + "-gamma.out"
 
-        for i, line in enumerate(lines):
-            # split and wrtie density data into file
-            if i >= line_numbers_of_results[0] and i <= line_numbers_of_results[1]:
-                density_data = open(density_extension, "a+")
-                density_data.writelines(line)
+        target_file_names = []
+        target_extensions = ["density", "radioactivity", "absorption", "fission", "heat", "gamma"]
+        for extension in target_extensions:
+            target_file_names.append(base_file_name+"-"+extension+".out")
+        # print(target_file_names)
 
-            # split and write radioactivity data into file
-            elif i >= line_numbers_of_results[2] and i <= line_numbers_of_results[3]:
-                radioactivity_data = open(radioactivity_extension, "a+")
-                radioactivity_data.writelines(line)
+        target_files = []
+        for target_file_name in target_file_names:
+            target_files.append(open(target_file_name, "w+"))
+        # print(target_files)
+        
+        for i, target_file in enumerate(target_files):
+            target_file.writelines(lines[line_numbers_of_results[2*i]:line_numbers_of_results[2*i+1]+1])
 
-            # split and write absorption rate data into file
-            elif i >= line_numbers_of_results[4] and i <= line_numbers_of_results[5]:
-                absorption_rate_data = open(absorption_rate_extension, "a+")
-                absorption_rate_data.writelines(line)
-            
-            # split and write fission data into file
-            elif i >= line_numbers_of_results[6] and i <= line_numbers_of_results[7]:
-                fission_data = open(fission_extension, "a+")
-                fission_data.writelines(line)
-            
-            # split and write heat data into file
-            elif i >= line_numbers_of_results[8] and i <= line_numbers_of_results[9]:
-                heat_data = open(heat_extension, "a+")
-                heat_data.writelines(line)
+        for target_file in target_files:
+            target_file.close()
 
-            # split and write gamma data into file
-            elif i >= line_numbers_of_results[10] and i <= line_numbers_of_results[11]:
-                gamma_data = open(gamma_extension, "a+")
-                gamma_data.writelines(line)
     return
 
 
