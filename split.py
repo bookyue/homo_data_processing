@@ -50,15 +50,20 @@ def search_multiple_strings_in_file(file_name, list_of_strings):
 
 
 def organize_files():
-    list_directories = ["absorption", "density", "fission", "gamma", "heat", "radioactivity"]
-    for directory_name in list_directories:
-        Path(directory_name).mkdir(exist_ok=True)
-
     file_names = glob.glob("./*.out")
-    for file_name in file_names:
+
+    list_directories = ["absorption", "density", "fission", "gamma", "heat", "radioactivity"]
+    
+    if file_names:
         for directory_name in list_directories:
-            if directory_name in file_name:
-                shutil.move(file_name, directory_name)
+            Path(directory_name).mkdir(exist_ok=True)
+
+        for file_name in file_names:
+            for directory_name in list_directories:
+                if directory_name in file_name:
+                    shutil.move(file_name, directory_name)
+    else:
+        print("No *.out files")
     return
 
 
@@ -72,8 +77,12 @@ def main():
     for file_name in files_name:
         print(file_name)
         matched_lines = search_multiple_strings_in_file(file_name, list_of_strings)
-        split_xml_out_file(file_name, matched_lines)
-
+        
+        if not matched_lines:
+            split_xml_out_file(file_name, matched_lines)
+        else:
+            print(f"Warning!!! {file_name} dosen't contain searched strings")
+    
     organize_files()
 
 
