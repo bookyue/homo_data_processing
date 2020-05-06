@@ -75,10 +75,10 @@ def main():
 
     files_name = glob.glob("./*.xml.out")
     for file_name in files_name:
-        print(file_name)
+        # print(file_name)
         matched_lines = search_multiple_strings_in_file(file_name, list_of_strings)
         
-        if not matched_lines:
+        if matched_lines:
             split_xml_out_file(file_name, matched_lines)
         else:
             print(f"Warning!!! {file_name} dosen't contain searched strings")
