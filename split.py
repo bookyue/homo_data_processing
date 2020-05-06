@@ -73,8 +73,8 @@ def main():
     # and return list of tuples containing line numbers
     list_of_strings = ["NucID", "Total", "Energy"]
 
-    files_name = glob.glob("./*.xml.out")
-    for file_name in files_name:
+    file_names = glob.glob("./*.xml.out")
+    for file_name in file_names:
         # print(file_name)
         matched_lines = search_multiple_strings_in_file(file_name, list_of_strings)
         
