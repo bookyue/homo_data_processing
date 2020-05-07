@@ -13,15 +13,17 @@ def method_compare(in_file1, in_file2):
 
     # relative tolerance
     # abs(X - Y) / 1 + min(abs(X), abs(Y))
-    is_less_than_e_9 = (np.abs(df_merged.iloc[:, 2]-df_merged.iloc[:, 3]) / 1 + np.where(np.abs(df_merged.iloc[:, 2]) < np.abs(df_merged.iloc[:, 3]), np.abs(df_merged.iloc[:, 2]), np.abs(df_merged.iloc[:, 3]))) < 1e-9
-    is_greater_than_e_9 = (np.abs(df_merged.iloc[:, 2]-df_merged.iloc[:, 3]) / 1 + np.where(np.abs(df_merged.iloc[:, 2]) < np.abs(df_merged.iloc[:, 3]), np.abs(df_merged.iloc[:, 2]), np.abs(df_merged.iloc[:, 3]))) > 1e-9
+    is_greater_than_e_9 = (np.abs(df_merged.iloc[:, 2]-df_merged.iloc[:, 3]) / np.where(np.abs(df_merged.iloc[:, 2]) < np.abs(df_merged.iloc[:, 3]), np.abs(df_merged.iloc[:, 2]), np.abs(df_merged.iloc[:, 3]))) > 1e-9
 
     is_not_the_same = df_merged.iloc[:, 2] != df_merged.iloc[:, 3]
     is_too_small_number_x = np.abs(df_merged.iloc[:, 2]) > 1e-26
     is_too_small_number_y = np.abs(df_merged.iloc[:, 3]) > 1e-26
     
-    df_output = pd.DataFrame(df_merged[is_not_the_same & is_too_small_number_x & is_too_small_number_y & (is_less_than_e_9 | is_greater_than_e_9)])
-
+    
+    df_output = pd.DataFrame(df_merged[is_not_the_same & is_greater_than_e_9 & is_too_small_number_x & is_too_small_number_y])
+    
+    df_output2 = df_output.sort_values(by='nucid')
+    df_output2.to_csv("结果" + ".csv", index=0)
     return df_output
 
 
