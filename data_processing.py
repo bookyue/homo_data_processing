@@ -13,14 +13,17 @@ def method_compare(in_file1, in_file2):
 
     # relative tolerance
     # abs(X - Y) / 1 + min(abs(X), abs(Y))
-    relative_numeric_tolerance_e_9 = (np.abs(df_merged.iloc[:, 2]-df_merged.iloc[:, 3]) / (1 + np.where(np.abs(df_merged.iloc[:, 2]) < np.abs(df_merged.iloc[:, 3]), np.abs(df_merged.iloc[:, 2]), np.abs(df_merged.iloc[:, 3])))) > 1e-9
+    relative_numeric_tolerance_e_9 = (np.abs(df_merged.iloc[:, 2]-df_merged.iloc[:, 3]) / (1 + np.where(np.abs(df_merged.iloc[:, 2]) < np.abs(df_merged.iloc[:, 3]), np.abs(df_merged.iloc[:, 2]), np.abs(df_merged.iloc[:, 3])))) > 1e-5
 
     is_not_the_same = df_merged.iloc[:, 2] != df_merged.iloc[:, 3]
-    is_too_small_number_x = np.abs(df_merged.iloc[:, 2]) > 1e-26
-    is_too_small_number_y = np.abs(df_merged.iloc[:, 3]) > 1e-26
+    is_too_small_number_x = np.abs(df_merged.iloc[:, 2]) > 1e-30
+    is_too_small_number_y = np.abs(df_merged.iloc[:, 3]) > 1e-30
     
+    nuclide_list = ['Np237', 'Pa233', 'U233', 'Th229', 'Ra225', 'Ac225', 'Fr221', 'At217', 'Bi213', 'Po213', 'Tl209', 'Pb209', 'Bi209', 'U234', 'U235', 'U236', 'U238', 'U239', 'Np237', 'Np239', 'Pu238', 'Pu239', 'Pu240', 'Pu241', 'Pu242', 'Am241', 'Am242', 'Am243', 'Cm242', 'Cm244', 'H3', 'Mo95', 'Tc99', 'Ru103', 'Ag109', 'Xe135', 'Cs133', 'Nd143', 'Nd145', 'Sm147', 'Sm149', 'Sm150', 'Sm151', 'Sm152', 'Eu153', 'Gd155']
     
-    df_output = pd.DataFrame(df_merged[is_not_the_same & relative_numeric_tolerance_e_9 & is_too_small_number_x & is_too_small_number_y])
+    # df_merged = df_merged[df_merged['nuc_name'].isin(nuclide_list)]
+    df_merged = pd.DataFrame(df_merged[is_not_the_same & relative_numeric_tolerance_e_9 & is_too_small_number_x & is_too_small_number_y])
+    df_output = df_merged[df_merged['nuc_name'].isin(nuclide_list)]
     
     return df_output
 
