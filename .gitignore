@@ -193,9 +193,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# xlsx/xls file
+# test file
 *.xlsx
 *.xls
+*.out
+*.csv
 
 # End of https://www.gitignore.io/api/python,pycharm+all
 
