@@ -6,7 +6,7 @@ import shutil
 
 
 # convert out file to csv file
-def out_to_csv(file_name, is_gamma):
+def out_to_csv(file_name, is_gamma=False):
     if is_gamma:
         read_file = pd.read_csv(file_name, sep='\s+', skiprows=1, names=['Energy', 'remove', 'result'],
                                 skipfooter=2, dtype={'Energy': str})
