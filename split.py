@@ -10,21 +10,22 @@ def split_xml_out_file(file_name, line_numbers_of_results):
         # export file name
         # *.xml.out -> *.extension.out
         pattern = re.compile('^(.*)\.xml\.out$')
-        base_file_name =  pattern.match(file_name).group(1)
+
+        base_file_name = pattern.match(file_name).group(1)
 
         target_file_names = []
         target_extensions = ['density', 'radioactivity', 'absorption', 'fission', 'heat', 'gamma']
         for extension in target_extensions:
-            target_file_names.append(base_file_name+'-'+extension+'.out')
+            target_file_names.append(base_file_name + '-' + extension + '.out')
         # print(target_file_names)
 
         target_files = []
         for target_file_name in target_file_names:
             target_files.append(open(target_file_name, 'w+'))
         # print(target_files)
-        
+
         for i, target_file in enumerate(target_files):
-            target_file.writelines(lines[line_numbers_of_results[2*i]:line_numbers_of_results[2*i+1]+1])
+            target_file.writelines(lines[line_numbers_of_results[2 * i]:line_numbers_of_results[2 * i + 1] + 1])
 
         for target_file in target_files:
             target_file.close()
@@ -33,7 +34,8 @@ def split_xml_out_file(file_name, line_numbers_of_results):
 
 
 def search_multiple_strings_in_file(file_name, list_of_strings):
-    '''Get line from the file along with line numbers, which contains any string from the list'''
+    """Get line from the file along with line numbers, which contains any string from the list"""
+
     line_numbers_of_results = []
     # Open the file in read only mode
     with open(file_name, 'r') as read_obj:
@@ -48,12 +50,11 @@ def search_multiple_strings_in_file(file_name, list_of_strings):
     return line_numbers_of_results
 
 
-
 def organize_files():
     file_names = glob.glob('./*.out')
 
     list_directories = ['absorption', 'density', 'fission', 'gamma', 'heat', 'radioactivity']
-    
+
     if file_names:
         for directory_name in list_directories:
             Path(directory_name).mkdir(exist_ok=True)
@@ -68,7 +69,6 @@ def organize_files():
 
 
 def main():
-
     # search for given strings in files
     # and return list of tuples containing line numbers
     list_of_strings = ['NucID', 'Total', 'Energy']
@@ -77,12 +77,13 @@ def main():
     for file_name in file_names:
         # print(file_name)
         matched_lines = search_multiple_strings_in_file(file_name, list_of_strings)
-        
+
         if matched_lines:
             split_xml_out_file(file_name, matched_lines)
         else:
-            print(f'Warning!!! {file_name} dosen't contain searched strings')
-    
+
+            print(f"Warning!!! {file_name} dosen't contain searched strings")
+
     organize_files()
 
 
