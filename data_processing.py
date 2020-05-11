@@ -11,10 +11,10 @@ def method_compare(in_file1, in_file2, is_gamma):
     df2 = pd.read_csv(in_file2, dtype={'Energy': str})
 
     if is_gamma:
-        df_merged = pd.merge(df1, df2, how="outer", on=['Energy'])
+        df_merged = pd.merge(df1, df2, how='outer', on=['Energy'])
         df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
     else:
-        df_merged = pd.merge(df1, df2, how="outer", on=["nucid", "nuc_name"])
+        df_merged = pd.merge(df1, df2, how='outer', on=['nucid', 'nuc_name'])
         df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
 
     print(df_merged)
@@ -37,9 +37,9 @@ def method_compare(in_file1, in_file2, is_gamma):
 
 def group_compare():
     df_add = deque()
-    file_names = glob.glob("./*.csv")
+    file_names = glob.glob('./*.csv')
 
-    pattern = re.compile("^\./(\D+)\d+-\d+-(\w+)\.csv$")
+    pattern = re.compile('^\./(\D+)\d+-\d+-(\w+)\.csv$')
     front_base_file_name = pattern.match(file_names[0]).group(1)
     end_base_file_name = pattern.match(file_names[0]).group(2)
 
@@ -55,52 +55,52 @@ def group_compare():
             # print(df_add.pop())
         if is_gamma:
             df_result = df_add.popleft()
-            df_result.columns = ['Energy', "TTA", "CRAM"]
+            df_result.columns = ['Energy', 'TTA', 'CRAM']
 
             tmp = df_add.popleft()
-            tmp.columns = ['Energy', "TTA", "QRAM"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=['Energy', "TTA"])
+            tmp.columns = ['Energy', 'TTA', 'QRAM']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['Energy', 'TTA'])
 
             tmp = df_add.popleft()
-            tmp.columns = ['Energy', "TTA", "LPAM"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=['Energy', "TTA"])
+            tmp.columns = ['Energy', 'TTA', 'LPAM']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['Energy', 'TTA'])
 
             tmp = df_add.popleft()
-            tmp.columns = ['Energy', "TTA", "MMPA"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=['Energy', "TTA"])
+            tmp.columns = ['Energy', 'TTA', 'MMPA']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['Energy', 'TTA'])
 
-            df_result = df_result[['Energy', "TTA", "CRAM", "QRAM", "LPAM", "MMPA"]]
+            df_result = df_result[['Energy', 'TTA', 'CRAM', 'QRAM', 'LPAM', 'MMPA']]
 
         else:
             df_result = df_add.popleft()
-            df_result.columns = ["nucid", "nuc_name", "TTA", "CRAM"]
+            df_result.columns = ['nucid', 'nuc_name', 'TTA', 'CRAM']
 
             tmp = df_add.popleft()
-            tmp.columns = ["nucid", "nuc_name", "TTA", "QRAM"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=["nucid", "nuc_name", "TTA"])
+            tmp.columns = ['nucid', 'nuc_name', 'TTA', 'QRAM']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['nucid', 'nuc_name', 'TTA'])
 
             tmp = df_add.popleft()
-            tmp.columns = ["nucid", "nuc_name", "TTA", "LPAM"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=["nucid", "nuc_name", "TTA"])
+            tmp.columns = ['nucid', 'nuc_name', 'TTA', 'LPAM']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['nucid', 'nuc_name', 'TTA'])
 
             tmp = df_add.popleft()
-            tmp.columns = ["nucid", "nuc_name", "TTA", "MMPA"]
-            df_result = pd.merge(df_result, tmp, how="outer", on=["nucid", "nuc_name", "TTA"])
+            tmp.columns = ['nucid', 'nuc_name', 'TTA', 'MMPA']
+            df_result = pd.merge(df_result, tmp, how='outer', on=['nucid', 'nuc_name', 'TTA'])
 
             # correct columns order
-            df_result = df_result[["nucid", "nuc_name", "TTA", "CRAM", "QRAM", "LPAM", "MMPA"]]
+            df_result = df_result[['nucid', 'nuc_name', 'TTA', 'CRAM', 'QRAM', 'LPAM', 'MMPA']]
 
             df_result.sort_values(by='nucid', inplace=True)
 
         print(df_result)
-        outname = f'{front_base_file_name}{str((i * 6) + 1).zfill(3)}-' \
+        out_name = f'{front_base_file_name}{str((i * 6) + 1).zfill(3)}-' \
                   f'{str((i + 5) * 6).zfill(3)}-{end_base_file_name}.csv '
 
-        outdir = './result'
-        if not os.path.exists(outdir):
-            os.mkdir(outdir)
+        out_dir = './result'
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
 
-        fullname = os.path.join(outdir, outname)
+        fullname = os.path.join(out_dir, out_name)
 
         df_result.to_csv(fullname, index=0)
 
