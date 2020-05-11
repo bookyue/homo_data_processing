@@ -1,13 +1,3 @@
-# import pandas as pd
-# import sys
-# import os
-#
-# writer = pd.ExcelWriter('default.xlsx') # Arbitrary output name
-# for csvfilename in sys.argv[1:]:
-#     df = pd.read_csv(csvfilename)
-#     df.to_excel(writer,sheet_name=os.path.splitext(csvfilename)[0])
-# writer.save()
-
 import glob
 import os
 import re
@@ -51,10 +41,10 @@ def scan_csv_files():
 
 
 def merge_csv_files_into_xlsx_files(file_names, out_name, sheet_names):
-    writer = pd.ExcelWriter(out_name, engine='xlsxwriter')
+    writer = pd.ExcelWriter(out_name)
     for csv_file_name, sheet_name in zip(file_names, sheet_names):
-        df = pd.read_csv(csv_file_name)
-        df.to_excel(writer, sheet_name=os.path.splitext(sheet_name)[0], index=False)
+        df = pd.read_csv(csv_file_name, dtype={0: str})
+        df.to_excel(writer, sheet_name=os.path.splitext(sheet_name)[0], index=False, engine='openpyxl')
     writer.save()
 
 
@@ -63,10 +53,9 @@ def main():
     # print(file_list)
     # print(flag_file_name_str)
     # print(out_names)
-    sheet_names = ['density', 'radioactivity', 'absorption', 'fission', 'heat', 'gamma']
     i = 0
     for flag_file_name_num, file_names in file_list.items():
-        merge_csv_files_into_xlsx_files(file_names, out_names[i], sheet_names)
+        merge_csv_files_into_xlsx_files(file_names, out_names[i], flag_file_name_str)
         i += 1
 
 
