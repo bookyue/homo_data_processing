@@ -94,7 +94,7 @@ def group_compare():
 
         print(df_result)
         out_name = f'{front_base_file_name}{str((i * 6) + 1).zfill(3)}-' \
-                  f'{str((i + 5) * 6).zfill(3)}-{end_base_file_name}.csv '
+                  f'{str((i + 5) * 6).zfill(3)}-{end_base_file_name}.csv'
 
         out_dir = './result'
         if not os.path.exists(out_dir):
