@@ -4,13 +4,17 @@ import pandas as pd
 from personal_lib import group_compare
 
 
-def method_compare(in_file1, in_file2, nuclide_list, is_gamma):
+def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> pd.DataFrame:
     """
     Args:
-        nuclide_list: a list of nuclide
         in_file1: filepath_or_bufferstr, path object or file-like object
         in_file2: filepath_or_bufferstr, path object or file-like object
+        nuclide_list: a list of nuclide
         is_gamma: if handling gamma files is True, and vice versa
+        is_process: turn on or off the process switch
+
+    Returns:
+        df_output: a DataFrame object
     """
     header_list = ['Energy', 'nucid', 'nuc_name']
     if is_gamma:
@@ -23,8 +27,9 @@ def method_compare(in_file1, in_file2, nuclide_list, is_gamma):
         header_list = header_list[1:3]
 
     df_merged = pd.merge(df1, df2, how='outer', on=header_list)
+
+
     df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
-    print(df_merged)
 
     # relative tolerance
     # abs(X - Y) / 1 + min(abs(X), abs(Y))

@@ -7,15 +7,16 @@ from personal_lib import group_compare
 load_dotenv()
 
 
-# test = json.loads(os.getenv('NUCLID_LIST'))
-
-def merger(in_file1, in_file2, nuclide_list, is_gamma: bool):
+def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> pd.DataFrame:
     """
     Args:
         nuclide_list: a list of nuclide
         in_file1: filepath_or_bufferstr, path object or file-like object
         in_file2: filepath_or_bufferstr, path object or file-like object
         is_gamma: if handling gamma files is True, and vice versa
+
+    Returns:
+        df_output: a DataFrame object
     """
 
     header_list = ['Energy', 'nucid', 'nuc_name']
