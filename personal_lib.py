@@ -1,4 +1,6 @@
+from array import array
 import glob
+import json
 import os
 import re
 from collections import deque
@@ -10,9 +12,13 @@ def group_compare(method_run):
     df_add = deque()
     file_names = glob.glob('./*.csv')
 
-    pattern = re.compile('^\./(\D+)\d+-\d+-(\w+)\.csv$')
+    nuclid_list = json.loads(os.getenv('NUCLID_LIST'))
+    pure_decay_list = list(map(int, json.loads(os.getenv('PURE_DECAY_SPLIT'))))
+    print(type(pure_decay_list))
+
+    pattern = re.compile('^\./(\D+)(\d+)-\d+-(\w+)\.csv$')
     front_base_file_name = pattern.match(file_names[0]).group(1)
-    end_base_file_name = pattern.match(file_names[0]).group(2)
+    end_base_file_name = pattern.match(file_names[0]).group(3)
 
     if 'gamma' == end_base_file_name:
         is_gamma = True
@@ -22,7 +28,15 @@ def group_compare(method_run):
     i = 0
     while True:
         for j in range(i + 1, i + 5):
-            df_add.append(method_run(file_names[i], file_names[j], is_gamma))
+            order_num = int(pattern.match(file_names[i]).group(2))
+            if pure_decay_list[1] >= order_num >= pure_decay_list[0]:
+                passed_list = nuclid_list['decay']
+            elif pure_decay_list[2] <= order_num <= pure_decay_list[3]:
+                passed_list = nuclid_list['decay']
+            else:
+                passed_list = nuclid_list['flux']
+
+            df_add.append(method_run(file_names[i], file_names[j], passed_list, is_gamma))
             # print(df_add.pop())
         if is_gamma:
             df_result = df_add.popleft()

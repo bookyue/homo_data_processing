@@ -4,29 +4,26 @@ import pandas as pd
 from personal_lib import group_compare
 
 
-def method_compare(in_file1, in_file2, is_gamma):
+def method_compare(in_file1, in_file2, nuclide_list, is_gamma):
     """
     Args:
+        nuclide_list: a list of nuclide
         in_file1: filepath_or_bufferstr, path object or file-like object
         in_file2: filepath_or_bufferstr, path object or file-like object
         is_gamma: if handling gamma files is True, and vice versa
     """
+    header_list = ['Energy', 'nucid', 'nuc_name']
     if is_gamma:
         df1 = pd.read_csv(in_file1, dtype={'Energy': str})
         df2 = pd.read_csv(in_file2, dtype={'Energy': str})
-        df_merged = pd.merge(df1, df2, how='outer', on=['Energy'])
-        df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
+        header_list = header_list[0:1]
     else:
         df1 = pd.read_csv(in_file1)
         df2 = pd.read_csv(in_file2)
-        df_merged = pd.merge(df1, df2, how='outer', on=['nucid', 'nuc_name'])
-        df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
-        nuclide_list = ['Np237', 'Pa233', 'U233', 'Th229', 'Ra225', 'Ac225', 'Fr221', 'At217', 'Bi213', 'Po213',
-                        'Tl209', 'Pb209', 'Bi209', 'U234', 'U235', 'U236', 'U238', 'U239', 'Np237', 'Np239', 'Pu238',
-                        'Pu239', 'Pu240', 'Pu241', 'Pu242', 'Am241', 'Am242', 'Am243', 'Cm242', 'Cm244', 'H3', 'Mo95',
-                        'Tc99', 'Ru103', 'Ag109', 'Xe135', 'Cs133', 'Nd143', 'Nd145', 'Sm147', 'Sm149', 'Sm150',
-                        'Sm151', 'Sm152', 'Eu153', 'Gd155']
+        header_list = header_list[1:3]
 
+    df_merged = pd.merge(df1, df2, how='outer', on=header_list)
+    df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
     print(df_merged)
 
     # relative tolerance
