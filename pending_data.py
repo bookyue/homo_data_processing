@@ -1,10 +1,8 @@
-from dotenv import load_dotenv
-import os
-import json
-import pandas as pd
-from personal_lib import group_compare
+import sys
 
-load_dotenv()
+import pandas as pd
+
+from personal_lib import group_compare
 
 
 def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> pd.DataFrame:
@@ -27,18 +25,19 @@ def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, i
     else:
         df1 = pd.read_csv(in_file1)
         df2 = pd.read_csv(in_file2)
+        df1 = df1[df1['nuc_name'].isin(nuclide_list)]
+        df2 = df2[df2['nuc_name'].isin(nuclide_list)]
         header_list = header_list[1:3]
 
     df_merged = pd.merge(df1, df2, how='outer', on=header_list)
     if not is_gamma:
-        df_output = df_merged[df_merged['nuc_name'].isin(nuclide_list)]
-    else:
-        df_output = df_merged
-    return df_output
+        df_merged = df_merged[['nucid', 'nuc_name', 'result_x', 'result_y']]
+
+    return df_merged, False
 
 
 def main():
-    group_compare(merger)
+    group_compare(merger, sys.argv[1])
 
 
 main()

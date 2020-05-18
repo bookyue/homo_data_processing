@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pandas as pd
 
@@ -24,12 +26,18 @@ def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list:
     else:
         df1 = pd.read_csv(in_file1)
         df2 = pd.read_csv(in_file2)
+        df1 = df1[df1['nuc_name'].isin(nuclide_list)]
+        df2 = df2[df2['nuc_name'].isin(nuclide_list)]
         header_list = header_list[1:3]
 
     df_merged = pd.merge(df1, df2, how='outer', on=header_list)
 
+    if not is_gamma:
+        df_merged = df_merged[['nucid', 'nuc_name', 'result_x', 'result_y']]
 
     df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
+
+    is_tta_null = df1.isnull().all().all()
 
     # relative tolerance
     # abs(X - Y) / 1 + min(abs(X), abs(Y))
@@ -43,13 +51,12 @@ def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list:
 
     df_output = pd.DataFrame(df_merged[is_not_the_same & relative_numeric_tolerance_e_5 &
                                        is_too_small_number_x & is_too_small_number_y])
-    if not is_gamma:
-        df_output = df_output[df_output['nuc_name'].isin(nuclide_list)]
-    return df_output
+
+    return df_output, is_tta_null
 
 
 def main():
-    group_compare(method_compare)
+    group_compare(method_compare, sys.argv[1])
 
 
 main()
