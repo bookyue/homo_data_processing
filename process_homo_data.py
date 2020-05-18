@@ -34,6 +34,8 @@ def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list:
 
     if not is_gamma:
         df_merged = df_merged[['nucid', 'nuc_name', 'result_x', 'result_y']]
+    else:
+        df_merged = df_merged[['Energy', 'result_x', 'result_y']]
 
     df_merged.replace(to_replace=[np.inf, -np.inf], value=np.nan, inplace=True)
 

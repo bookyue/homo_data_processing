@@ -13,7 +13,7 @@ load_dotenv()
 def group_compare(method_run, out_dir):
     df_add = deque()
     file_names = glob.glob('./*.csv')
-    file_names = sorted(file_names, key=lambda order: order[-15:-12])
+    file_names = sorted(file_names)
 
     nuclid_list = json.loads(os.getenv('NUCLID_LIST'))
     pure_decay_list = list(map(int, json.loads(os.getenv('PURE_DECAY_SPLIT'))))
@@ -83,11 +83,11 @@ def group_compare(method_run, out_dir):
 
             # correct columns order
             df_result = df_result[['nucid', 'nuc_name', 'TTA', 'CRAM', 'QRAM', 'LPAM', 'MMPA']]
-            if is_tta_null:
-                # df_result.loc[:, ['TTA', 'CRAM']] = df_result.loc[:, ['CRAM', 'TTA']].values
-                df_result['TTA'], df_result['CRAM'] = df_result['CRAM'].copy(), df_result['TTA'].copy()
-            df_result.sort_values(by='nucid', inplace=True)
 
+            df_result.sort_values(by='nucid', inplace=True)
+        
+        if is_tta_null:
+            df_result['TTA'], df_result['CRAM'] = df_result['CRAM'].copy(), df_result['TTA'].copy()
         print(df_result)
         out_name = f'{front_base_file_name}{str((i * 6) + 1).zfill(3)}-' \
                    f'{str((i + 5) * 6).zfill(3)}-{end_base_file_name}.csv'
