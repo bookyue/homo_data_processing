@@ -30,8 +30,11 @@ def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, i
         header_list = header_list[1:3]
 
     df_merged = pd.merge(df1, df2, how='outer', on=header_list)
+
     if not is_gamma:
         df_merged = df_merged[['nucid', 'nuc_name', 'result_x', 'result_y']]
+    else:
+        df_merged = df_merged[['Energy', 'result_x', 'result_y']]
 
     return df_merged, False
 
