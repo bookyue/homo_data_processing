@@ -52,7 +52,8 @@ def search_multiple_strings_in_file(file_name, list_of_strings):
 
 def organize_files():
     file_names = glob.glob('./*.out')
-
+    file_names = sorted(file_names)
+    
     list_directories = ['absorption', 'density', 'fission', 'gamma', 'heat', 'radioactivity']
 
     if file_names:

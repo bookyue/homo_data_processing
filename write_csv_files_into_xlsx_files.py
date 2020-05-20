@@ -7,6 +7,7 @@ import pandas as pd
 
 def scan_csv_files():
     file_names = glob.glob('./*.csv')
+    file_names = sorted(file_names)
 
     pattern = re.compile('^\./(\D+)(\d+)-\d+-(\w+)\.csv$')
     front_base_file_name = pattern.match(file_names[0]).group(1)
