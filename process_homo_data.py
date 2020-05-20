@@ -1,4 +1,5 @@
 import sys
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -6,7 +7,8 @@ import pandas as pd
 from personal_lib import group_compare
 
 
-def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> pd.DataFrame:
+def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> Tuple[
+    pd.DataFrame, bool]:
     """
     Args:
         in_file1: filepath_or_bufferstr, path object or file-like object
@@ -17,6 +19,7 @@ def method_compare(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list:
 
     Returns:
         df_output: a DataFrame object
+        is_tta_null: judge the TTA is NULL or not
     """
     header_list = ['Energy', 'nucid', 'nuc_name']
     if is_gamma:

@@ -1,11 +1,12 @@
 import sys
+from typing import Tuple
 
 import pandas as pd
 
 from personal_lib import group_compare
 
 
-def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> pd.DataFrame:
+def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, is_gamma: bool) -> Tuple[pd.DataFrame, bool]:
     """
     Args:
         nuclide_list: a list of nuclide
@@ -14,7 +15,8 @@ def merger(in_file1: pd.DataFrame, in_file2: pd.DataFrame, nuclide_list: list, i
         is_gamma: if handling gamma files is True, and vice versa
 
     Returns:
-        df_output: a DataFrame object
+        df_merged: a DataFrame object
+        False: TTA is not NULL
     """
 
     header_list = ['Energy', 'nucid', 'nuc_name']
